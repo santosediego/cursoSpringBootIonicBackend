@@ -1,29 +1,31 @@
 package com.santosediego.cursomc.resources;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.santosediego.cursomc.domain.Categoria;
+import com.santosediego.cursomc.services.CategoriaService;
+
+/* -- Controlador REST -- */
 
 @RestController //Anotações necessárias para Rest;
 @RequestMapping(value = "/categorias")//Necessário para direcionar a url para esse recurso;
 public class CategoriaResource {
 	
-	@RequestMapping(method = RequestMethod.GET)//Para a função poder funcionar deve-se anota-la com o devido metodo;
-	public List<Categoria> listar() {//mudar o método para lista;
+	@Autowired
+	private CategoriaService service;
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)//Para a função poder funcionar deve-se anota-la com o devido metodo;
+	public ResponseEntity<?> find(@PathVariable Integer id) {//Para identificar o id que o usuário digitou a anotação PathVarable direciona;
+		/*O ResponseEntity automaticamente já encapsula varias info http para o serviço rest*/
 		
-		Categoria cat1 = new Categoria(1, "Informática");
-		Categoria cat2 = new Categoria(2, "Escritório");
+		Categoria obj = service.buscar(id);
 		
-		List<Categoria> list = new ArrayList<>();
-		list.add(cat1);
-		list.add(cat2);
-		
-		return list;
+		return ResponseEntity.ok().body(obj);
 	}
 
 }

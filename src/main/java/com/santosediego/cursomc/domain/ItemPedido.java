@@ -5,11 +5,14 @@ import java.io.Serializable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonIgnore
 	/*A chave dessa classe será do tipo ItemPedidoPk, o que parecerá com uma tipo primitivo*/
 	@EmbeddedId
 	private ItemPedidoPK id = new ItemPedidoPK();//Chave composta para o JPA;
@@ -32,6 +35,7 @@ public class ItemPedido implements Serializable{
 	}
 	
 	//Para melhorar a semantica da classe;
+	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}

@@ -16,7 +16,7 @@ public class ClienteService {
 	@Autowired //A depedência será auto instanciada pelo Spring Boot com esta anotação;
 	private ClienteRepository repo;// A interface.
 	
-	public Cliente buscar(Integer id) {
+	public Cliente find(Integer id) {
 		
 		Optional<Cliente> obj = repo.findById(id);
 		

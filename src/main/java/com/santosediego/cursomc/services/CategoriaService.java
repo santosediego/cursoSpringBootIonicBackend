@@ -16,7 +16,7 @@ public class CategoriaService {
 	@Autowired //A depedência será auto instanciada pelo Spring Boot com esta anotação;
 	private CategoriaRepository repo;// A interface.
 	
-	public Categoria buscar(Integer id) {
+	public Categoria find(Integer id) {
 		
 		Optional<Categoria> obj = repo.findById(id);
 		
@@ -28,6 +28,13 @@ public class CategoriaService {
 	public Categoria insert(Categoria obj) {
 		
 		obj.setId(null);
+		
+		return repo.save(obj);
+	}
+	
+	public Categoria update(Categoria obj) {
+		
+		find(obj.getId());
 		
 		return repo.save(obj);
 	}

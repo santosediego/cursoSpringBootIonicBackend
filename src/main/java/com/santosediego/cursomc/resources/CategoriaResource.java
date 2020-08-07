@@ -24,10 +24,10 @@ public class CategoriaResource {
 	private CategoriaService service;
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)//Para a função poder funcionar deve-se anota-la com o devido metodo;
-	public ResponseEntity<?> find(@PathVariable Integer id) {//Para identificar o id que o usuário digitou a anotação PathVarable direciona;
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {//Para identificar o id que o usuário digitou a anotação PathVarable direciona;
 		/*O ResponseEntity automaticamente já encapsula varias info http para o serviço rest*/
 		
-		Categoria obj = service.buscar(id);
+		Categoria obj = service.find(id);
 		
 		return ResponseEntity.ok().body(obj);
 	}
@@ -43,4 +43,12 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody Categoria obj, @PathVariable Integer id){
+		
+		obj.setId(id);//Garantir que a categoria atualizada é a informada na id;
+		obj = service.update(obj);
+		
+		return ResponseEntity.noContent().build();
+	}
 }

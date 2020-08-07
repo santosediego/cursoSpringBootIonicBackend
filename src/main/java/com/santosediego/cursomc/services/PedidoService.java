@@ -16,7 +16,7 @@ public class PedidoService {
 	@Autowired //A depedência será auto instanciada pelo Spring Boot com esta anotação;
 	private PedidoRepository repo;// A interface.
 	
-	public Pedido buscar(Integer id) {
+	public Pedido find(Integer id) {
 		
 		Optional<Pedido> obj = repo.findById(id);
 		

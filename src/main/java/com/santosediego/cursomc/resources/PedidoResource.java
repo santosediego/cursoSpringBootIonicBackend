@@ -20,10 +20,10 @@ public class PedidoResource {
 	private PedidoService service;
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)//Para a função poder funcionar deve-se anota-la com o devido metodo;
-	public ResponseEntity<?> find(@PathVariable Integer id) {//Para identificar o id que o usuário digitou a anotação PathVarable direciona;
+	public ResponseEntity<Pedido> find(@PathVariable Integer id) {//Para identificar o id que o usuário digitou a anotação PathVarable direciona;
 		/*O ResponseEntity automaticamente já encapsula varias info http para o serviço rest*/
 		
-		Pedido obj = service.buscar(id);
+		Pedido obj = service.find(id);
 		
 		return ResponseEntity.ok().body(obj);
 	}

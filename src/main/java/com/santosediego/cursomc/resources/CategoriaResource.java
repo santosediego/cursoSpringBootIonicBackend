@@ -30,14 +30,9 @@ public class CategoriaResource {
 	@Autowired
 	private CategoriaService service;
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET) // Para a função poder funcionar deve-se anota-la com o
-																	// devido metodo;
-	public ResponseEntity<Categoria> find(@PathVariable Integer id) {// Para identificar o id que o usuário digitou a
-																		// anotação PathVarable direciona;
-		/*
-		 * O ResponseEntity automaticamente já encapsula varias info http para o serviço
-		 * rest
-		 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET) // Para a função poder funcionar deve-se anota-la com o devido metodo;
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {// Para identificar o id que o usuário digitou a anotação PathVarable direciona;
+		//O ResponseEntity automaticamente já encapsula varias info http para o serviço rest;
 
 		Categoria obj = service.find(id);
 

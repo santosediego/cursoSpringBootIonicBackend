@@ -2,27 +2,27 @@ package com.santosediego.cursomc.resources.exceptions;
 
 import java.io.Serializable;
 
-public class FildMessage implements Serializable {
+public class FieldMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String fildName;
 	private String message;
 
-	public FildMessage() {
+	public FieldMessage() {
 	}
 
-	public FildMessage(String fildName, String message) {
+	public FieldMessage(String fildName, String message) {
 		super();
 		this.fildName = fildName;
 		this.message = message;
 	}
 
-	public String getFildName() {
+	public String getFieldName() {
 		return fildName;
 	}
 
-	public void setFildName(String fildName) {
+	public void setFieldName(String fildName) {
 		this.fildName = fildName;
 	}
 

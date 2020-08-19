@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.santosediego.cursomc.domain.enums.TipoCliente;
 
 @Entity
-public class Cliente implements Serializable{
+public class Cliente implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -27,22 +28,25 @@ public class Cliente implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String nome;
+
+	@Column(unique = true)
 	private String email;
 	private String cpfOuCnpj;
-	/*Converter o tipo cliente para int, usar um macente na função abaixo*/
+
+	/* Converter o tipo cliente para int, usar um macente na função abaixo */
 	private Integer tipo;
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos = new ArrayList<>();
-	
+
 	@ElementCollection
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
-	
+
 	public Cliente() {
 	}
 
@@ -52,7 +56,7 @@ public class Cliente implements Serializable{
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipo = (tipo == null) ? null : tipo.getCod(); //Operador ternário;
+		this.tipo = (tipo == null) ? null : tipo.getCod(); // Operador ternário;
 	}
 
 	public Integer getId() {
@@ -88,7 +92,7 @@ public class Cliente implements Serializable{
 	}
 
 	public TipoCliente getTipo() {
-		/*Aqui vamos usar a função criada no TipoCliente*/
+		/* Aqui vamos usar a função criada no TipoCliente */
 		return TipoCliente.toEnum(tipo);
 	}
 

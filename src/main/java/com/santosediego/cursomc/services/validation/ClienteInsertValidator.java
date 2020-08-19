@@ -27,7 +27,8 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 	@Override
 	public boolean isValid(ClienteNewDTO objDto, ConstraintValidatorContext context) {
 
-		List<FieldMessage> list = new ArrayList<>();// Nossa classe criada para carregar o nome do campo e o tipo de erro.
+		// Lista criada para carregar o nome do campo e o tipo de erro identificado;
+		List<FieldMessage> list = new ArrayList<>();
 
 		if (objDto.getTipo().equals(TipoCliente.PESSOAFISICA.getCod()) && !BR.isValidCPF(objDto.getCpfOuCnpj())) {
 			list.add(new FieldMessage("cpfOuCnpj", "CPF inválido"));

@@ -11,12 +11,16 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.santosediego.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
 public abstract class Pagamento implements Serializable{
-	/*Ter certeza de que nao ira instanciar um pagamento diretamente*/
+	/*Abstract par ter certeza de que nao ira instanciar um pagamento diretamente*/
+	/*O JsonTypeInfo é para o jackson a partir do que for informado conseguir istanciar corretamente
+	 * com compra por boleto ou cartão, nessas duas classes tem a identificação*/
 
 	private static final long serialVersionUID = 1L;
 

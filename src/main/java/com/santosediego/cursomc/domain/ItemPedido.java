@@ -1,6 +1,8 @@
 package com.santosediego.cursomc.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -8,23 +10,23 @@ import javax.persistence.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class ItemPedido implements Serializable{
+public class ItemPedido implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@JsonIgnore
-	/*A chave dessa classe será do tipo ItemPedidoPk, o que parecerá com uma tipo primitivo*/
+	// A chave dessa classe será do tipo ItemPedidoPk, o que parecerá com uma tipo primitivo;
 	@EmbeddedId
-	private ItemPedidoPK id = new ItemPedidoPK();//Chave composta para o JPA;
-	
+	private ItemPedidoPK id = new ItemPedidoPK();// Chave composta para o JPA;
+
 	private Double desconto;
 	private Integer quantidade;
 	private Double preco;
-	
+
 	public ItemPedido() {
 	}
 
-	//O id dessa classe é uma particularidade do JPA, portanto o contrutor será diferente;
+	// O id dessa classe é uma particularidade do JPA, portanto o contrutor será diferente;
 	public ItemPedido(Pedido pedido, Produto produto, Double desconto, Integer quantidade, Double preco) {
 		super();
 		id.setPedido(pedido);
@@ -33,25 +35,25 @@ public class ItemPedido implements Serializable{
 		this.quantidade = quantidade;
 		this.preco = preco;
 	}
-	
+
 	public double getSubTotal() {
 		return (preco - desconto) * quantidade;
 	}
-	
-	//Para melhorar a semantica da classe;
+
+	// Para melhorar a semantica da classe;
 	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
-	
+
 	public void setPedido(Pedido pedido) {
 		id.setPedido(pedido);
 	}
-	
+
 	public Produto getProduto() {
 		return id.getProduto();
 	}
-	
+
 	public void setProduto(Produto produto) {
 		id.setProduto(produto);
 	}
@@ -111,5 +113,20 @@ public class ItemPedido implements Serializable{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		StringBuilder builder = new StringBuilder();
+		builder.append(getProduto().getNome());
+		builder.append(", Qte: ");
+		builder.append(getQuantidade());
+		builder.append(", Preço unitário: ");
+		builder.append(nf.format(getPreco()));
+		builder.append(", Subtotal: ");
+		builder.append(nf.format(getSubTotal()));
+		builder.append("\n");
+		return builder.toString();
 	}
 }

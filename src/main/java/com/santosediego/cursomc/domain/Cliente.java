@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.santosediego.cursomc.domain.enums.Perfil;
 import com.santosediego.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -46,11 +49,17 @@ public class Cliente implements Serializable {
 	@CollectionTable(name = "TELEFONE")
 	private Set<String> telefones = new HashSet<>();
 
+	// Eager para garantir que ao buscar os usuários também será trago os perfis referentes;
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PERFIS")
+	private Set<Integer> perfis = new HashSet<>();
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "cliente")
 	private List<Pedido> pedidos = new ArrayList<>();
 
 	public Cliente() {
+		addPerfil(Perfil.CLIENTE);// Para adiconar o perfil cliente como padrão;
 	}
 
 	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo, String senha) {
@@ -61,6 +70,7 @@ public class Cliente implements Serializable {
 		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCod(); // Operador ternário;
 		this.senha = senha;
+		addPerfil(Perfil.CLIENTE);// Da mesma forma, add perfil cliente padronizado;
 	}
 
 	public Integer getId() {
@@ -126,6 +136,17 @@ public class Cliente implements Serializable {
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+
+	public Set<Perfil> getPerfis(){
+		//converter o inteiro para o perfil equivalente, lambada;
+		return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+		//Para cada elemento x desta coleção, Perfil toEnum x;
+	}
+
+	//Para adicionar um novo perfil ao cliente;
+	public void addPerfil(Perfil perfil) {
+		perfis.add(perfil.getCod());
 	}
 
 	public List<Pedido> getPedidos() {

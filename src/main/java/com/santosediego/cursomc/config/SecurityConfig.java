@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	//Caminhos que será permitido apenas leitura;
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
-			"/categorias/**" 
+			"/categorias/**",
+			"/clientes/**"//Por enquanto;
 	};
 
 	// Sobreescrever o método configure;

@@ -26,15 +26,16 @@ public abstract class AbstractEmailService implements EmailService {
 	@Autowired
 	private JavaMailSender javaMailSender;// Para instanciar um MimeMessage;
 
+	@Override
 	public void sendOrderConfirmationEmail(Pedido obj) {
-		SimpleMailMessage sm = prepareSimpleMailMessageFromPedido(obj);
-		sendEmail(sm);
+		SimpleMailMessage sm = prepareSimpleMailMessageFromPedido(obj);//função abaixo;
+		sendEmail(sm);// EmailService
 		// !Template Message = consegue implementar o metodo baseado em metodos
 		// abstratos que dpois vão ser implementados pelas implementações da inferface;
 	}
 
 	// protected pois pode ser acessado por subclasses, só não pode ser usado pelos
-	// usuários das classes(controladores e serviços;
+	// usuários das classes(controladores e serviços);
 	protected SimpleMailMessage prepareSimpleMailMessageFromPedido(Pedido obj) {
 
 		SimpleMailMessage sm = new SimpleMailMessage();
@@ -65,12 +66,12 @@ public abstract class AbstractEmailService implements EmailService {
 
 	@Override
 	public void sendOrderConfirmationHtmlEmail(Pedido obj) {
-		MimeMessage mm;
+		
 
 		// Tratando a excessão do método prepareMimeMessageFromPedido, caso apresentar
 		// exceção ao enviar o emil em html ele enviará o email em texto plano;
 		try {
-			mm = prepareMimeMessageFromPedido(obj);
+			MimeMessage mm = prepareMimeMessageFromPedido(obj);// Função abaixo;
 			sendHtmlEmail(mm);
 		} catch (MessagingException e) {
 			sendOrderConfirmationEmail(obj);

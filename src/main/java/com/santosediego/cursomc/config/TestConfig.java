@@ -24,8 +24,9 @@ public class TestConfig {
 		dbService.instantiateTestDatabase();
 		return true;
 	}
-	
-	@Bean//Fica disponivoel como um componete para o sistema;
+
+	// Fica disponivoel como um componete para o sistema;
+	@Bean
 	public EmailService emailService() {
 		return new MockEmailService();
 	}

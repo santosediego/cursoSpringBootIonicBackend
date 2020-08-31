@@ -27,7 +27,7 @@ public class DevConfig {
 	@Bean
 	public boolean instantiateDatabase() throws ParseException {
 
-		//se não for "create" ele não insere tudo que estiver no DBService;
+		// se não for "create" ele não insere tudo que estiver no DBService;
 		if (!"create".equals(strategy)) {
 			return false;
 		}
@@ -35,7 +35,8 @@ public class DevConfig {
 		return true;
 	}
 
-	@Bean//Fica disponivoel como um componete para o sistema;
+	// Fica disponivoel como um componete para o sistema;
+	@Bean
 	public EmailService emailService() {
 		return new SmtpEmailService();
 	}

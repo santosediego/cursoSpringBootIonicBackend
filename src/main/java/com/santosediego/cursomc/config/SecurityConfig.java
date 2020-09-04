@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -24,6 +25,7 @@ import com.santosediego.cursomc.security.JWTUtil;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)// Permite inserr anotações de pré autorizações nos endpoints;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -43,9 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	// Caminhos que será permitido apenas leitura;
 	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
-			"/categorias/**",
-			"/clientes/**"// Por enquanto
-																											// enquanto;
+			"/categorias/**"
+	};
+
+	private static final String[] PUBLIC_MATCHERS_POST = {
+			"/clientes/**"
 	};
 
 	// Sobreescrever o método configure;
@@ -55,10 +59,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
 			http.headers().frameOptions().disable(); // Se tiver em modo teste habilita o h2 console;
 		}
-		http.cors().and().csrf().disable();
 
-		http.authorizeRequests().antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
-				.antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
+		http.cors().and().csrf().disable();
+		http.authorizeRequests()
+			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll() // permitir autorização de post no vetor de post;
+			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll() // permitir autorização de get no vetor de get;
+			.antMatchers(PUBLIC_MATCHERS).permitAll()
+			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));/*Em SecurityConfig, registrar o filtro de autenticação*/
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

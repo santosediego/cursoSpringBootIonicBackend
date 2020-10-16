@@ -1,5 +1,6 @@
 package com.santosediego.cursomc.services;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.santosediego.cursomc.domain.Cidade;
 import com.santosediego.cursomc.domain.Cliente;
@@ -34,12 +36,15 @@ public class ClienteService {
 
 	@Autowired // A depedência será auto instanciada pelo Spring Boot com esta anotação;
 	private ClienteRepository repo;// A interface.
-	
+
 	@Autowired
 	private EnderecoRepository enderecoRepository;
 
+	@Autowired
+	private S3Service s3Service;
+
 	public Cliente find(Integer id) {
-		
+
 		UserSS user = UserService.authenticated();
 		if(user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId())) {
 			throw new AuthorizationException("Acesso negado");
@@ -54,7 +59,7 @@ public class ClienteService {
 
 	@Transactional // Para garantir as transações;
 	public Cliente insert(Cliente obj) {
-		
+
 		obj.setId(null);
 		obj = repo.save(obj);
 		enderecoRepository.saveAll(obj.getEnderecos());
@@ -113,5 +118,9 @@ public class ClienteService {
 	private void updateData(Cliente newObj, Cliente obj) {
 		newObj.setNome(obj.getNome());
 		newObj.setEmail(obj.getEmail());
+	}
+
+	public URI uploadProfilePicture(MultipartFile multipartFile) {
+		return s3Service.uploadFile(multipartFile);
 	}
 }
